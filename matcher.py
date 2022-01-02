@@ -88,7 +88,6 @@ class netvlad(object):
             testFeat = vlad_encoding.detach().cpu().numpy()
 
         F = cdist(testFeat, dbFeat[0:2,:])
-        print(F)
         idx = np.argmin(F[0])
         if idx == 1:
             return True
