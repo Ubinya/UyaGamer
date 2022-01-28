@@ -134,3 +134,4 @@ dmypy.json
 *.pkl
 *.json
 *.png
+SavedImg/*
