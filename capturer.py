@@ -68,10 +68,19 @@ class capturer:
         print("保存图片"+str(self.imcnt)+".jpg")
         self.imcnt += 1
 
+    def reload(self):
+        self.imcnt = 0
+        with open((save_path+'save.json'),'w') as f:
+            save={'cur_cnt':self.imcnt}
+            json_str=json.dumps(save)
+            f.write(json_str)
+        print("重新开始截图，注意未备份图片会被覆盖")
+
     # 监听截图,j键截图，t键退出
     def capture_loop(self):
-        print("开始截图循环，J键截图, T键退出")
+        print("开始截图循环，J键截图, T键退出, Q键重新开始")
         kb.add_hotkey('j', self.take_a_shot)
+        kb.add_hotkey('q', self.reload)
         kb.wait('t')
         print("结束截图循环结束")
         with open((save_path+'save.json'),'w') as f:
