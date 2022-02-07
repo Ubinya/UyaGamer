@@ -67,7 +67,7 @@ class capturer:
         # 格式化成2016-03-20 11:45:39形式
         save_name = time.strftime("%Y-%m-%d %H-%M-%S",time.localtime())
         self.refresh_win_pos()
-        self.win_up()
+        # self.win_up()
         img = ImageGrab.grab((self.left,self.top,self.right,self.bot))
         img.save(save_path+save_name+".jpg", "JPEG")
         print("保存图片"+save_name+".jpg")
@@ -85,7 +85,7 @@ class capturer:
     def capture_loop(self):
         print("开始截图循环，J键截图, T键退出")
         kb.add_hotkey('j', self.take_a_shot)
-        kb.add_hotkey('q', self.reload)
+        # kb.add_hotkey('q', self.reload)
         kb.wait('t')
         print("结束截图循环结束")
 

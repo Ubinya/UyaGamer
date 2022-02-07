@@ -10,6 +10,8 @@ def new_col(**kargs):
     return sqlstr
 
 def add_item(**kargs):
-    sqlstr = '''alter table '''
-    # under building
+    sqlstr = "insert into "
+    sqlstr += kargs['table'] + ' '
+    sqlstr += "values "
+    sqlstr += kargs['item_tuple'] # under building
     return sqlstr
