@@ -83,7 +83,7 @@ class capturer:
 
     # 监听截图,j键截图，t键退出
     def capture_loop(self):
-        print("开始截图循环，J键截图, T键退出")
+        print("开始截图循环，J键截图, T键退出, 请手动把模拟器窗口放在最前")
         kb.add_hotkey('j', self.take_a_shot)
         # kb.add_hotkey('q', self.reload)
         kb.wait('t')
