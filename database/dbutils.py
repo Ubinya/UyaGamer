@@ -1,5 +1,9 @@
 import sqlite3
+from enum import Enum
 
+class dbType(Enum):
+    TABLE = 1
+    COL = 2
 
 def new_col(**kargs):
     sqlstr = '''alter table '''
@@ -21,3 +25,4 @@ def add_item(**kargs):
 def str2sql(string):
     res = '\'' + string + '\''
     return res
+
