@@ -1,17 +1,47 @@
-import tkinter as tk
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-top = tk.Tk()
+"""
+Py40 PyQt5 tutorial 
 
-li=['C','python','php','html','SQL','java']
-movie=['CSS','jQuery','Bootstrap']
-listb=tk.Listbox(top)  #  创建两个列表组件
-listb2=tk.Listbox(top)
-for item in li:  # 第一个小部件插入数据
-    listb.insert(0,item)
+This example shows a tooltip on 
+a window and a button.
 
-for item in movie:  # 第二个小部件插入数据
-    listb2.insert(0,item)
+author: Jan Bodnar
+website: py40.com 
+last edited: January 2015
+"""
 
-listb.pack()  # 将小部件放置到主窗口中
-listb2.pack()
-top.mainloop()  # 进入消息循环
+import sys
+from PyQt5.QtWidgets import (QWidget,QToolTip,
+                             QPushButton,QApplication)
+from PyQt5.QtGui import QFont
+
+
+class dbWin(QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        #这种静态的方法设置一个用于显示工具提示的字体。我们使用10px滑体字体。
+        QToolTip.setFont(QFont('SansSerif',10))
+
+        #创建一个提示，我们称之为settooltip()方法。我们可以使用丰富的文本格式
+        self.setToolTip('This is a <b>QWidget</b> widget')
+
+        #创建一个PushButton并为他设置一个tooltip
+        btn=QPushButton('Button',self)
+        btn.setToolTip('This is a <b>QPushButton</b> widget')
+
+        #btn.sizeHint()显示默认尺寸
+        btn.resize(btn.sizeHint())
+
+        #移动窗口的位置
+        btn.move(50,50)
+
+        self.setGeometry(300,300,300,200)
+        self.setWindowTitle('Tooltips')
+        self.show()

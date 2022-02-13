@@ -1,0 +1,14 @@
+比较好用的labelme指令：
+labelme raw_data --labels labels.txt --autosave
+运行前先把待标记图片放入raw_data文件夹
+我们使用矩形标签就足够了，ctrl+r快捷键创建矩形标签
+注意，运行时需要在datasets目录内，而不能在项目根目录
+自动保存，就不需要点保存按钮了
+需要先在labels.txt中写入需要使用的标签列表
+
+将labelme格式标签json转换为coco格式：
+确保labelme格式的json文件在raw_data文件夹
+原始图片复制一份到train_data文件夹
+然后在datasets目录中 python labelme2coco.py
+会在train_data文件夹生成coco.json
+

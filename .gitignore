@@ -136,3 +136,8 @@ dmypy.json
 *.png
 SavedImg/*
 *.db
+datasets/raw_data/*
+datasets/train_data/*.json
+datasets/train_data/*.jpg
+
+
