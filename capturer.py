@@ -48,7 +48,6 @@ class capturer:
             if t:
                 if t == self.win_title:
                     self.handle = h #窗口句柄
-                    self.win_t = t #窗口名称
                     #hwnd=win32gui.FindWindow(None,t)
                     #win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
                     break
