@@ -1,11 +1,6 @@
-import sqlalchemy as sa
-from sqlalchemy import Column, Integer, NCHAR, NVARCHAR
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql import func
-
 from enum import Enum
-
+import json
+import os
 
 class ObjGroup(Enum):
     DEFAULT = 0
@@ -15,53 +10,68 @@ class ObjGroup(Enum):
     CARD = 4
 
 
-Base = declarative_base()
+class ObjTable(object):
+    def __init__(self, game):
+        self.game = game
+        if os.path.exists(self.game+'.json'):
+            with open(self.game + '.json', 'r', encoding='utf-8') as f:
+                self.objs = json.load(f)
+            print('数据库{}读入完成'.format(self.game))
+        else:
+            self.reset_db()
+            print('数据库{}不存在，创建完成'.format(self.game))
 
-class ObjTable(Base):# 列名和成员名要相同
-    __tablename__ = 'obj_tab'
-    id = Column('id',Integer,primary_key=True)
-    obj_name = Column('obj_name',NCHAR(20))
-    descr = Column('descr',NVARCHAR)
-    pack = Column('pack',Integer)
-    game = Column('game',NCHAR(30))
+        # 注意这里还没有考虑json存不存在的问题
+        # 以及这里建立后就读入了数据库，其实实际使用时可以根据运行的游戏只读取一个数据库
+
+    def reset_db(self):
+        with open(self.game+'.json','w', encoding='utf-8') as f:
+            save = [
+                {
+                    'id':-1,
+                    'obj_name':'init',
+                    'desc':'init desc',
+                    'group':0
+                }]
+            json_str = json.dumps(save,indent=4,ensure_ascii=False)
+            f.write(json_str)
+        self.objs = save
+        print('数据库{}重置完成'.format(self.game))
+
+    def add_item(self, **kwargs):
+
+        self.objs.sort(key=self.item_id)
+        new_id = self.objs[-1]['id'] + 1
+        new_item = {
+            'id': new_id,
+            'obj_name': kwargs['obj_name'],
+            'desc': kwargs['desc'],
+            'group': kwargs['group']
+        }
+        self.objs.append(new_item)
+        with open(self.game+'.json','w', encoding='utf-8') as f:
+            json_str = json.dumps(self.objs, indent=4, ensure_ascii=False)
+            f.write(json_str)
+        print('数据库{}插入新条目完成 id：{}'.format(self.game, new_id))
+
+    def item_id(self, elem):
+        return elem['id']
+
+
 
 class MyDB(object):
     def __init__(self):
-        self.engine=sa.create_engine('sqlite:///database/test.db?check_same_thread=False',echo=True)
-        # engine = sa.create_engine('sqlite:///test.db?check_same_thread=False')
+        self.games = {}
 
-        self.metadata=sa.MetaData(self.engine)
-
-        DBSession=sa.orm.sessionmaker(bind=self.engine)
-        self.session=DBSession()
-
-    def setup_tab(self):
-        # 这里后面添加对table name的分支
-        ObjTable.__table__.create(self.engine, checkfirst=True)
-        item0 = {'id': 0,
-                'game': None,
-                'obj_name': None,
-                'descr': None,
-                'pack': 0,}
-        self.session.add_all([ObjTable(**item0)])
-        self.session.commit()
+    def add_game(self, game):
+        new_game = ObjTable(game)
+        self.games[game] = new_game
+        print('新数据库{}添加完成'.format(game))
 
     def add_obj(self, **kwargs):
-        item = {'id':-1,
-                'game':None,
-                'obj_name':None,
-                'descr':None,
-                'pack':0}
-        #rows = self.session.query(ObjTable).filter_by(obj_name='it').all()
-        rows = self.session.query(ObjTable.id).order_by(ObjTable.id.desc()).first()
-        print(type(rows))
-        id = rows.id
-        print(id)
-        exit()
+        game = kwargs['game']
+        self.games[game].add_item(**kwargs)
 
-        tmp = ObjTable(**kwargs)
-        self.session.add_all([tmp])
-        self.session.commit()
 
 
 
