@@ -12,8 +12,8 @@ class ObjGroup(Enum):
 
 class ObjTable(object):
     def __init__(self, game):
-        self.game = game
-        if os.path.exists(self.game+'.json'):
+        self.game = game#存储游戏名称字符串，作为数据库名称
+        if os.path.exists(self.game+'.json'):# 如果数据库json存在就直接读入
             with open(self.game + '.json', 'r', encoding='utf-8') as f:
                 self.objs = json.load(f)
             print('数据库{}读入完成'.format(self.game))
@@ -21,8 +21,9 @@ class ObjTable(object):
             self.reset_db()
             print('数据库{}不存在，创建完成'.format(self.game))
 
-        # 注意这里还没有考虑json存不存在的问题
-        # 以及这里建立后就读入了数据库，其实实际使用时可以根据运行的游戏只读取一个数据库
+    # 以及这里建立后就把数据库读入内存，其实实际使用时可以根据运行的游戏只读取一个数据库
+
+
 
     def reset_db(self):
         with open(self.game+'.json','w', encoding='utf-8') as f:
